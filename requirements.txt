@@ -1,0 +1,6 @@
+time
+pycord
+pywin32
+python-dotenv
+playsound3
+mss
