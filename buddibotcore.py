@@ -1,3 +1,4 @@
+"""Buddie Bot"""
 # --------- imports
 import discord
 import asyncio
@@ -84,24 +85,43 @@ restartin = [
 intents = discord.Intents.default()
 intents.presences = True # Enable the presence intent
 intents.members = True # Often needed for other functions, good practice to include
-intents.message_content = True
+intents.message_content = True # ok maybe remove this later
 
 client = discord.Client(intents=intents)
 
-
 load_dotenv()
-CURRENCY_FILE = 'currency.json'
+DATA_FILE = 'currency.json'
+# buddie: 547900581692309521
+# mell: 1078788946609324175
 bot = discord.Bot(owner_id=547900581692309521)
 
+# they look the exact same, but take my word for it they arent
 def load_data():
-    if not os.path.exists(CURRENCY_FILE):
+    if not os.path.exists(DATA_FILE):
         return {}
-    with open(CURRENCY_FILE, 'r') as f:
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
 def save_data(data):
-    with open(CURRENCY_FILE, 'w') as f:
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
+
+def get_value(user_id: int, label: str, default=0):
+    data = load_data()
+    return data.get(str(user_id), {}).get(label, default)
+
+def set_value(user_id: int, label: str, value):
+    data = load_data()
+    uid = str(user_id)
+    if uid not in data:
+        data[uid] = {}
+    data[uid][label] = value
+    save_data(data)
+
+def add_value(user_id: int, label: str, amount: int):
+    current = get_value(user_id, label, 0)
+    set_value(user_id, label, current + amount)
+    return current + amount
 
 # command groups
 testing = bot.create_group("testing", "admin tools 4 bruddie")
@@ -119,24 +139,24 @@ buddie = bot.create_group("buddie", "commands to mess with buddie")
 async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     error = getattr(error, "original", error)
     if hasattr(ctx.command, 'on_error'):
-        playsound('C:\\Users\\silva\\Desktop\\!buddibot\\error.wav', block=False)
+        playsound('error.wav', block=False)
         await ctx.send(f"oh, i guess buddie flipped up something. go tell him about this error: `{error}`")
 
     if isinstance(error, commands.MissingRequiredArgument):
-        playsound('C:\\Users\\silva\\Desktop\\!buddibot\\error.wav', block=False)
+        playsound('error.wav', block=False)
         await ctx.send(f"Error: hey, you're missing the argument `{error.param.name}`! please, use the command properly.")
     elif isinstance(error, commands.MissingPermissions):
-        playsound('C:\\Users\\silva\\Desktop\\!buddibot\\error.wav', block=False)
+        playsound('error.wav', block=False)
         await ctx.send("Error: whoops, you don't have enough permissions! go get /op'd, right about now.")
     else:
-        playsound('C:\\Users\\silva\\Desktop\\!buddibot\\error.wav', block=False)
+        playsound('error.wav', block=False)
         await ctx.send(f"ohhh shoot i just had an error: `{error}`. bot didn't crash, but i recommend you ping me, budie double you, for this.")
 
 @tasks.loop(seconds=20) # ts broken for whatever reason
 async def status_task(self) -> None:
         statuses = [
             'Now featuring: Screenshots!', 
-            'Also try: Spazbot',
+            'Also try: SpazBot',
             'Also try: Gummy\'s Bank INC.',
             'What? What do you mean? I didn\'t do that.',
             'straight up budding it',
@@ -187,7 +207,7 @@ startin = [
 
 @bot.event
 async def on_ready():
-    playsound('C:\\Users\\silva\\Desktop\\!buddibot\\start.wav', block=False)
+    playsound('start.wav', block=False)
     print(random.choice(startin))
 
 
@@ -197,19 +217,12 @@ async def on_ready():
 @currency.command(name="balance", description="see how many dollary doos you have in yo walet")
 @discord.option("user", description="Who's balance should you see?")
 async def balance(ctx, user: discord.Member):
-    data = load_data()
-    user_id = str(user.id)
-    
-    # Register user if they don't exist
-    if user_id not in data:
-        data[user_id] = 100  # Starting balance
-        save_data(data)
     if ctx.user.bot:
         await ctx.respond("hey, that's a bot. those don't get to have money.")
     elif user == bot.user:
         await ctx.respond("sorry, dude. i got no dollary doos on me. just trust me.")
     else:
-        await ctx.respond(f"{ctx.user.mention} has {data[user_id]} dollary doos.")
+        await ctx.respond(f"{user.mention} has {get_value(user.id, 'ddoos')} dollary doos.")
 
 workign = [
     "worked at a macgongals and got 500 dollary doos <:bluecap_cool:1461469457661694045> new balance:",
@@ -233,60 +246,38 @@ gambawin = [
     "ummm, okay. you win. whatever."
 ]
 
-#1
-# Command to earn foobar2 cryptocurrency
+# get a JOB and earn monies
 @currency.command(name="workin", description="get a JOB!!!!! (Scariest gameplay imaginable)")
 async def work(ctx):
-    data = load_data()
-    user_id = str(ctx.author.id)
-    
-    if user_id not in data:
-        data[user_id] = 100
-    
-    data[user_id] += 500 # Add 50 dollary doos
-    save_data(data)
-    
-    await ctx.respond(f'{random.choice(workign)} {data[user_id]}')
+    add_value(ctx.user.id, 'ddoos', 500)
+    await ctx.respond(f'{random.choice(workign)} {get_value(ctx.user.id, 'ddoos')}')
 
 @testing.command(name="give", description="Give someone free money dolary doos :money-mouth:")
 @commands.is_owner()
 @discord.option("user", description="Who should recieve it?")
 @discord.option("amount", description="How much?")
-async def hooneringit(ctx, user: discord.Member, amount):
-    data = load_data()
-    user_id = str(user.id)
-
-
+async def hooneringit(ctx, user: discord.Member, amount: int):
     if user.id == ctx.bot.user.id:
         await ctx.respond("yeah right. in your dreams.", ephemeral=True)
     elif user.bot:
         await ctx.respond("that's a bot you bum. go away", ephemeral=True)
     else:
-        if user_id not in data:
-            data[user_id] = 100
-        data[user_id] += int(amount) # Add the specfied amount of dollary doos
-        save_data(data)
-        await ctx.respond(f'gave {user} {amount} dollary doos, their current balance is: {data[user_id]}', ephemeral=True)
+        add_value(user.id, 'ddoos', amount)
+        await ctx.respond(f'gave {user} {amount} dollary doos, their current balance is: {get_value(user.id, 'ddoos')}', ephemeral=True)
 
 @testing.command(name="reset_stats", description="Reset someone's stats. Feeling good yet?")
 @commands.is_owner()
 @discord.option("user", description="Who?")
 async def take(ctx, user: discord.Member):
-    data = load_data()
-    user_id = str(user.id)
-
-
     if user.id == ctx.bot.user.id:
         await ctx.respond("yeah right. in your dreams.", ephemeral=True)
     elif user.bot:
         await ctx.respond("that's a bot you bum. go away", ephemeral=True)
     else:
-        if user_id not in data:
-            data[user_id] = 100
-        data[user_id] = 100 # Add the specfied amount of dollary doos
-        save_data(data)
-        await ctx.respond(f'reset {user}\'s dollary doos, their current balance is: {data[user_id]}', ephemeral=True)
+        set_value(user.id, 'ddoos', 100)
+        await ctx.respond(f'reset {user}\'s dollary doos, their current balance is: {get_value(user.id, 'ddoos')}', ephemeral=True)
 
+# FIXME: why are these separated?
 @take.error
 async def take_error(ctx, error):
     if isinstance(error, commands.NotOwner):
@@ -301,60 +292,48 @@ async def hooneringit_error(ctx, error):
     else:
         await ctx.respond(f"whuh what happened oh theres an error okay here it is: {error}")
 
-
+# don't work (and maybe like die)
 @currency.command(name="evilwork", description="remain unemployed (most boring gameplay imaginable)")
 async def evilwork(ctx):
-    data = load_data()
-    user_id = str(ctx.author.id)
-    
-    if user_id not in data:
-        data[user_id] = 100
-    if data[user_id] >= 24:
-        data[user_id] -= 25 # Lose 25 dollary doos
-        save_data(data)
-        await ctx.respond(f'You spent 25 dollary doos buying instant noodles. Because youre unemployed. Balance: {data[user_id]} (By the way, this economy SUCKS! What do you mean a cup of noodles is 25 DOLLARY DOOS???)')
+    playermonies = get_value(ctx.user.id, 'ddoos')
+    if playermonies >= 24:
+        add_value(ctx.user.id, 'ddoos', -25) # negative because EVIL
+        playermonies = get_value(ctx.user.id, 'ddoos')
+        await ctx.respond(f'You spent 25 dollary doos buying instant noodles. Because youre unemployed. Balance: {playermonies} (By the way, this economy SUCKS! What do you mean a cup of noodles is 25 DOLLARY DOOS???)')
     else:
-        data[user_id] -= 9000 # go bankrupt
-        save_data(data)
-        await ctx.respond(f"You went to the grocery store, but couldn't afford anything to eat. You then starved to death. -9000 dollary doos, current balance: {data[user_id]}")
+        add_value(ctx.user.id, 'ddoos', -9000) # even more evil
+        playermonies = get_value(ctx.user.id, 'ddoos')
+        await ctx.respond(f"You went to the grocery store, but couldn't afford anything to eat. You then starved to death. -9000 dollary doos, current balance: {playermonies}")
 
 
 @currency.command(name="gamba", description="because every currency bot needs one")
 async def gamba(ctx):
     gamba = random.randint(-2000,2000)
-    data = load_data()
-    user_id = str(ctx.author.id)
-    
-    if user_id not in data:
-        data[user_id] = 100
-
-    data[user_id] += gamba # add the gambeling factorio
-    save_data(data)
-    if data[user_id] >= 0:
-        if gamba <= 0:
-            await ctx.respond(f'{random.choice(gambalose)} wallet emptied by {gamba} dollary doos, current balance: {data[user_id]}')
-        else:
-            await ctx.respond(f'{random.choice(gambawin)} got {gamba} dollary doos, current balance: {data[user_id]}')
+    playermonies = get_value(ctx.user.id, 'ddoos')
+    if playermonies <= 0:
+        await ctx.respond(f'whoops, sorry buddy, but you have {playermonies} dollary doos. cant gamble in debt.')
+        return
+    add_value(ctx.user.id, 'ddoos', gamba)
+    playermonies = get_value(ctx.user.id, 'ddoos')
+    if gamba <= 0:
+        await ctx.respond(f'{random.choice(gambalose)} wallet emptied by {gamba} dollary doos, current balance: {playermonies}')
     else:
-        await ctx.respond(f'whoops, sorry buddy, but you have {data[user_id]} dollary doos. cant gamble in debt.')
+        await ctx.respond(f'{random.choice(gambawin)} got {gamba} dollary doos, current balance: {playermonies}')
+        
 
 @currency.command(name="supergamba", description="instead of min and max being 2k, it's 10k. High risk, high reward!")
-async def gamba(ctx):
+async def supergamba(ctx):
     gamba = random.randint(-10000,10000)
-    data = load_data()
-    user_id = str(ctx.author.id)
-    
-    if user_id not in data:
-        data[user_id] = 100
-    if data[user_id] >= 0:
-        data[user_id] += gamba # add the SUPER gambeling factorio
-        save_data(data)
-        if gamba <= 0:
-            await ctx.respond(f'{random.choice(gambalose)} wallet emptied by {gamba} dollary doos, current balance: {data[user_id]}')
-        else:
-            await ctx.respond(f'{random.choice(gambawin)} got {gamba} dollary doos, current balance: {data[user_id]}')
+    playermonies = get_value(ctx.user.id, 'ddoos')
+    if playermonies <= 0:
+        await ctx.respond(f'whoops, sorry buddy, but you have {playermonies} dollary doos. cant supergamble in debt.')
+        return
+    add_value(ctx.user.id, 'ddoos', gamba)
+    playermonies = get_value(ctx.user.id, 'ddoos')
+    if gamba <= 0:
+        await ctx.respond(f'{random.choice(gambalose)} wallet emptied by {gamba} dollary doos, current balance: {playermonies}')
     else:
-        await ctx.respond(f'whoops, sorry buddy, but you have {data[user_id]} dollary doos. cant supergamble in debt.')
+        await ctx.respond(f'{random.choice(gambawin)} got {gamba} dollary doos, current balance: {playermonies}')
 
 # If this fails, add 'async' to it
 def get_hwnds_by_exe_name(exe_name: str):
@@ -539,7 +518,7 @@ async def scren(ctx:discord.ApplicationContext):
         filename = sct.shot(output="LatestScreenshot.png", callback=on_exists)
         print("Took a screenshot at:")
         print(ctx.channel.id)
-        playsound('C:\\Users\\silva\\Desktop\\!buddibot\\screenshot.wav', block=False)
+        playsound('screenshot.wav', block=False)
     await ctx.respond(file=discord.File(f'{filename}'))
     print()
 
