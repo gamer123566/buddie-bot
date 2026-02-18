@@ -1,3 +1,6 @@
+![Buddie-Bot](https://github.com/user-attachments/assets/feae4307-52d6-4042-9dbf-9e11bf6fa760)
+
+
 # Buddie Bot
 It's a bot. Made by Buddie. You'd never see it comin.
 
