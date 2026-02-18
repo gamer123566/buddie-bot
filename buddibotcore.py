@@ -108,6 +108,10 @@ def save_data(data):
 
 def get_value(user_id: int, label: str, default=0):
     data = load_data()
+    if label == 'dollarys':
+        default = 100
+    if label == 'admino':
+        default = False
     return data.get(str(user_id), {}).get(label, default)
 
 def set_value(user_id: int, label: str, value):
@@ -122,6 +126,15 @@ def add_value(user_id: int, label: str, amount: int):
     current = get_value(user_id, label, 0)
     set_value(user_id, label, current + amount)
     return current + amount
+
+def admino_only(ctx):
+    data = load_data()
+    if get_value(ctx.author.id, 'admino') != True:
+        return False
+    else:
+        return True
+
+
 
 # command groups
 testing = bot.create_group("testing", "admin tools 4 bruddie")
@@ -218,11 +231,11 @@ async def on_ready():
 @discord.option("user", description="Who's balance should you see?")
 async def balance(ctx, user: discord.Member):
     if ctx.user.bot:
-        await ctx.respond("hey, that's a bot. those don't get to have money.")
+        await ctx.respond("hey, that's a bot. those don't get to have money.", ephemeral=True)
     elif user == bot.user:
-        await ctx.respond("sorry, dude. i got no dollary doos on me. just trust me.")
+        await ctx.respond("sorry, dude. i got no dollary doos on me. just trust me.", ephemeral=True)
     else:
-        await ctx.respond(f"{user.mention} has {get_value(user.id, 'ddoos')} dollary doos.")
+        await ctx.respond(f"{user.mention} has {get_value(user.id, 'dollarys')} dollary doos.")
 
 workign = [
     "worked at a macgongals and got 500 dollary doos <:bluecap_cool:1461469457661694045> new balance:",
@@ -249,72 +262,72 @@ gambawin = [
 # get a JOB and earn monies
 @currency.command(name="workin", description="get a JOB!!!!! (Scariest gameplay imaginable)")
 async def work(ctx):
-    add_value(ctx.user.id, 'ddoos', 500)
-    await ctx.respond(f'{random.choice(workign)} {get_value(ctx.user.id, 'ddoos')}')
+    add_value(ctx.user.id, 'dollarys', 500)
+    await ctx.respond(f'{random.choice(workign)} {get_value(ctx.user.id, 'dollarys')}')
 
-@testing.command(name="give", description="Give someone free money dolary doos :money-mouth:")
-@commands.is_owner()
+@testing.command(name="give", description="assign a stat to a user")
+@discord.option("stat", description="What stat? [STATS: dollarys, admino]")
 @discord.option("user", description="Who should recieve it?")
-@discord.option("amount", description="How much?")
-async def hooneringit(ctx, user: discord.Member, amount: int):
-    if user.id == ctx.bot.user.id:
-        await ctx.respond("yeah right. in your dreams.", ephemeral=True)
-    elif user.bot:
-        await ctx.respond("that's a bot you bum. go away", ephemeral=True)
+@discord.option("value", description="How much, or what?")
+@discord.option("hidden", description="Should it be hidden?", required=False, default=True, input_type=bool)
+async def hooneringit(ctx, user: discord.Member, stat, value, hidden: bool):
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
     else:
-        add_value(user.id, 'ddoos', amount)
-        await ctx.respond(f'gave {user} {amount} dollary doos, their current balance is: {get_value(user.id, 'ddoos')}', ephemeral=True)
+        if hidden == True:
+            if user.id == ctx.bot.user.id:
+                await ctx.respond("yeah right. in your dreams.", ephemeral=True)
+            elif user.bot:
+                await ctx.respond("that's a bot you bum. go away", ephemeral=True)
+            else:
+                set_value(user.id, stat, value)
+                await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}', ephemeral=True)
+        else:
+            if user.id == ctx.bot.user.id:
+                await ctx.respond("yeah right. in your dreams.")
+            elif user.bot:
+                await ctx.respond("that's a bot you bum. go away")
+            else:
+                set_value(user.id, stat, value)
+                await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}')
 
 @testing.command(name="reset_stats", description="Reset someone's stats. Feeling good yet?")
-@commands.is_owner()
 @discord.option("user", description="Who?")
 async def take(ctx, user: discord.Member):
-    if user.id == ctx.bot.user.id:
-        await ctx.respond("yeah right. in your dreams.", ephemeral=True)
-    elif user.bot:
-        await ctx.respond("that's a bot you bum. go away", ephemeral=True)
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
     else:
-        set_value(user.id, 'ddoos', 100)
-        await ctx.respond(f'reset {user}\'s dollary doos, their current balance is: {get_value(user.id, 'ddoos')}', ephemeral=True)
-
-# FIXME: why are these separated?
-@take.error
-async def take_error(ctx, error):
-    if isinstance(error, commands.NotOwner):
-        await ctx.respond("You're not Buddie. <:buddie_anger:1461469460409094347>")
-    else:
-        await ctx.respond(f"whuh what happened oh theres an error okay here it is: {error}")
-
-@hooneringit.error
-async def hooneringit_error(ctx, error):
-    if isinstance(error, commands.NotOwner):
-        await ctx.respond("You're not Buddie. <:buddie_anger:1461469460409094347>")
-    else:
-        await ctx.respond(f"whuh what happened oh theres an error okay here it is: {error}")
+        if user.id == ctx.bot.user.id:
+            await ctx.respond("yeah right. in your dreams.", ephemeral=True)
+        elif user.bot:
+            await ctx.respond("that's a bot you bum. go away", ephemeral=True)
+        else:
+            set_value(user.id, 'dollarys', 100)
+            await ctx.respond(f'reset {user}\'s dollary doos, their current balance is: {get_value(user.id, 'dollarys')}', ephemeral=True)
 
 # don't work (and maybe like die)
 @currency.command(name="evilwork", description="remain unemployed (most boring gameplay imaginable)")
 async def evilwork(ctx):
-    playermonies = get_value(ctx.user.id, 'ddoos')
+    playermonies = get_value(ctx.user.id, 'dollarys')
     if playermonies >= 24:
-        add_value(ctx.user.id, 'ddoos', -25) # negative because EVIL
-        playermonies = get_value(ctx.user.id, 'ddoos')
+        add_value(ctx.user.id, 'dollarys', -25) # negative because EVIL
+        playermonies = get_value(ctx.user.id, 'dollarys')
         await ctx.respond(f'You spent 25 dollary doos buying instant noodles. Because youre unemployed. Balance: {playermonies} (By the way, this economy SUCKS! What do you mean a cup of noodles is 25 DOLLARY DOOS???)')
     else:
-        add_value(ctx.user.id, 'ddoos', -9000) # even more evil
-        playermonies = get_value(ctx.user.id, 'ddoos')
+        add_value(ctx.user.id, 'dollarys', -9000) # even more evil
+        playermonies = get_value(ctx.user.id, 'dollarys')
         await ctx.respond(f"You went to the grocery store, but couldn't afford anything to eat. You then starved to death. -9000 dollary doos, current balance: {playermonies}")
 
 
 @currency.command(name="gamba", description="because every currency bot needs one")
 async def gamba(ctx):
     gamba = random.randint(-2000,2000)
-    playermonies = get_value(ctx.user.id, 'ddoos')
+    playermonies = get_value(ctx.user.id, 'dollarys')
     if playermonies <= 0:
         await ctx.respond(f'whoops, sorry buddy, but you have {playermonies} dollary doos. cant gamble in debt.')
         return
-    add_value(ctx.user.id, 'ddoos', gamba)
-    playermonies = get_value(ctx.user.id, 'ddoos')
+    add_value(ctx.user.id, 'dollarys', gamba)
+    playermonies = get_value(ctx.user.id, 'dollarys')
     if gamba <= 0:
         await ctx.respond(f'{random.choice(gambalose)} wallet emptied by {gamba} dollary doos, current balance: {playermonies}')
     else:
@@ -324,12 +337,12 @@ async def gamba(ctx):
 @currency.command(name="supergamba", description="instead of min and max being 2k, it's 10k. High risk, high reward!")
 async def supergamba(ctx):
     gamba = random.randint(-10000,10000)
-    playermonies = get_value(ctx.user.id, 'ddoos')
+    playermonies = get_value(ctx.user.id, 'dollarys')
     if playermonies <= 0:
         await ctx.respond(f'whoops, sorry buddy, but you have {playermonies} dollary doos. cant supergamble in debt.')
         return
-    add_value(ctx.user.id, 'ddoos', gamba)
-    playermonies = get_value(ctx.user.id, 'ddoos')
+    add_value(ctx.user.id, 'dollarys', gamba)
+    playermonies = get_value(ctx.user.id, 'dollarys')
     if gamba <= 0:
         await ctx.respond(f'{random.choice(gambalose)} wallet emptied by {gamba} dollary doos, current balance: {playermonies}')
     else:
@@ -412,36 +425,27 @@ async def gyat(ctx: discord.ApplicationContext):
    await ctx.respond("https://tenor.com/view/bonnie-fnaf-fnafmovie-gif-5124708767506072283 it was thiis big")
 
 @testing.command(name="resetto", description="Resetto! I love troubleshooting.")
-@commands.is_owner()  # This decorator will raise commands.NotOwner if the invoking user doesn't have the owner_id
 async def secret(ctx: discord.ApplicationContext):
-      print("Restarting...")
-      await ctx.respond(random.choice (restartin))
-      os.execv(sys.executable, ['python'] + sys.argv)
-
-@secret.error
-async def on_application_command_error(ctx: discord.ApplicationContext, error: discord.DiscordException):
-    if isinstance(error, commands.NotOwner):
-        await ctx.respond("You're not Buddie. <:buddie_anger:1461469460409094347>")
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
+    else:
+        print("Restarting...")
+        await ctx.respond(random.choice (restartin))
+        os.execv(sys.executable, ['python'] + sys.argv)
 
 @testing.command(name="shutup", description="Instead of shutting DOWN, it shuts UP!")
-@commands.is_owner() # Restricts the command to the bot owner only
 async def shutdown(ctx):
-    """Shuts down the bot."""
-    print("Bot is shutting down... Death to all bugs!")
-    await ctx.respond("I guess this is goodbye. See you later!")
-    await bot.close() # Gracefully closes the connection to Discord
-
-# Error handler for the shutdown command (for non-owners)
-@shutdown.error
-async def shutdown_error(ctx, error):
-    if isinstance(error, commands.NotOwner):
-        await ctx.respond("You're not Buddie. <:buddie_anger:1461469460409094347>")
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
     else:
-        await ctx.respond(f"whuh what happened oh theres an error okay here it is: {error}")
+        print("Bot is shutting down... Death to all bugs!")
+        await ctx.respond("Oh god. I see it. I see the light. Please. I don't wanna die. I don't wanna die. I DON'T WANNA DIE I DON'T WANNA DIE **I DON'T WANN**")
+        await bot.close() # Gracefully closes the connection to Discord
 
 @image.command(name="goony", description="Displays a picture of Goonin' Gummy. Viewer discretion is adviced.")
 async def goony(ctx: discord.ApplicationContext):
     await ctx.respond(goonzies)
+
 @image.command(name="hytaleherobrine", description="hytale herobrine")
 async def heroin(ctx: discord.ApplicationContext):
     await ctx.respond(hytale)
@@ -462,7 +466,7 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes your commands, because Discord is stupid.")
+@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.")
 async def ref(ctx: discord.ApplicationContext):
     await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")
 

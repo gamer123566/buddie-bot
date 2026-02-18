@@ -35,7 +35,7 @@ It's a bot. Made by Buddie. You'd never see it comin.
 - /ai
 - /cudix_facts
 - /getip
-### Testing commands (Only for Bot admins, see owner_id (this includes the ones in currency related commands) ((except refresh and math)))
+### Testing commands (Only for Bot admins, see generated currency.json, admino value (this includes the ones in currency related commands) ((except refresh and math)))
 - /testing refresh
 - /testing math
 - /testing resetto
