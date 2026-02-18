@@ -8,8 +8,8 @@ It's a bot. Made by Buddie. You'd never see it comin.
 ### Currency-related commands
 - /currency balance
 - /currency workin
-- /testing give
-- /testing reset_stats
+- /admin give
+- /admin reset_stats
 - /currency evilwork
 - /currency gamba
 - /currency supergamba
@@ -35,8 +35,9 @@ It's a bot. Made by Buddie. You'd never see it comin.
 - /ai
 - /cudix_facts
 - /getip
-### Testing commands (Only for Bot admins, see generated currency.json, admino value (this includes the ones in currency related commands) ((except refresh and math)))
+### Testing commands
 - /testing refresh
 - /testing math
-- /testing resetto
-- /testing shutup
+### Admin commands (Only for Bot admins, see generated currency.json, admino value (this includes the ones in currency related commands)
+- /admin resetto
+- /admin shutup

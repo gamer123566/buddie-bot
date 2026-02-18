@@ -137,13 +137,15 @@ def admino_only(ctx):
 
 
 # command groups
-testing = bot.create_group("testing", "admin tools 4 bruddie")
+testing = bot.create_group("testing", "testing stuff")
 
 image = bot.create_group("image", "Image-related commands")
 
 currency = bot.create_group("currency", "Currency commands")
 
 buddie = bot.create_group("buddie", "commands to mess with buddie")
+
+admin = bot.create_group("admin","admin tools")
 
 
 # ------------- event shyt
@@ -265,7 +267,7 @@ async def work(ctx):
     add_value(ctx.user.id, 'dollarys', 500)
     await ctx.respond(f'{random.choice(workign)} {get_value(ctx.user.id, 'dollarys')}')
 
-@testing.command(name="give", description="assign a stat to a user")
+@admin.command(name="give", description="assign a stat to a user")
 @discord.option("stat", description="What stat? [STATS: dollarys, admino]")
 @discord.option("user", description="Who should recieve it?")
 @discord.option("value", description="How much, or what?")
@@ -291,7 +293,7 @@ async def hooneringit(ctx, user: discord.Member, stat, value, hidden: bool):
                 set_value(user.id, stat, value)
                 await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}')
 
-@testing.command(name="reset_stats", description="Reset someone's stats. Feeling good yet?")
+@admin.command(name="reset_stats", description="Reset someone's stats. Feeling good yet?")
 @discord.option("user", description="Who?")
 async def take(ctx, user: discord.Member):
     if admino_only(ctx) == False:
@@ -424,7 +426,7 @@ async def ping(ctx: discord.ApplicationContext):
 async def gyat(ctx: discord.ApplicationContext):
    await ctx.respond("https://tenor.com/view/bonnie-fnaf-fnafmovie-gif-5124708767506072283 it was thiis big")
 
-@testing.command(name="resetto", description="Resetto! I love troubleshooting.")
+@admin.command(name="resetto", description="Resetto! I love troubleshooting.")
 async def secret(ctx: discord.ApplicationContext):
     if admino_only(ctx) == False:
         await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
@@ -433,7 +435,7 @@ async def secret(ctx: discord.ApplicationContext):
         await ctx.respond(random.choice (restartin))
         os.execv(sys.executable, ['python'] + sys.argv)
 
-@testing.command(name="shutup", description="Instead of shutting DOWN, it shuts UP!")
+@admin.command(name="shutup", description="Instead of shutting DOWN, it shuts UP!")
 async def shutdown(ctx):
     if admino_only(ctx) == False:
         await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
