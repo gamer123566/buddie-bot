@@ -19,6 +19,7 @@ import win32gui
 import psutil     #psutil - https://github.com/giampaolo/psutil
 import win32process
 import time
+import ffmpeg
 
 # ---- variables cause its annoying to have them clutter my shyt ----
 hytale = "https://cdn.discordapp.com/attachments/1461513081459970236/1461762256168550648/image.png?ex=696bbbb0&is=696a6a30&hm=fbb800c1305463a1d18cc85e353cf1eac3e1ce1c3e84dd4b492b16a5c6b7b1fe&"
@@ -468,9 +469,9 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.")
-async def ref(ctx: discord.ApplicationContext):
-    await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")
+@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.") #change the description every update
+async def ref(ctx: discord.ApplicationContext):                                                #to make the command say its outdated and make it
+    await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")    #force refresh your commands list
 
 @testing.command(name="math", description="First+Second. Used for testing multiple fields.")
 # pycord will figure out the types for you
@@ -496,7 +497,12 @@ async def add(ctx, text: discord.Option(str)): # type: ignore
   elif text == "@here":
     await ctx.respond("Hey, uh, don't fucking do that.")
   else:
-    await ctx.respond(f"{text}")
+    check = len(text)
+
+    if check >= 1999:
+        await ctx.respond("Text is too long. Couldn't send.", ephemeral=True)
+    else:
+        await ctx.respond(f"{text}")
 
 @image.command(name="buddie", description="Fetch a random image of Buddie. :]")
 async def budzo(ctx: discord.ApplicationContext):
@@ -523,7 +529,7 @@ async def scren(ctx:discord.ApplicationContext):
     with mss.mss() as sct:
         filename = sct.shot(output="LatestScreenshot.png", callback=on_exists)
         print("Took a screenshot at:")
-        print(ctx.channel.id)
+        print(f'{ctx.channel.name}, at server {ctx.guild.name}')
         playsound('screenshot.wav', block=False)
     await ctx.respond(file=discord.File(f'{filename}'))
     print()
@@ -581,11 +587,20 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error: d
 async def cudih(ctx:discord.ApplicationContext):
     await ctx.respond("Detroit Lions own the Chicago Bears and Caleb Williams is not iceman\n\n\n\n\n\n... what? \"what does this mean\"...? i don't know either.")
 
-
-
-
-
-
+@bot.command(name="ytmp3_download", description="Download and send a YouTube video as an MP3! Provided by yt-dlp.")
+@discord.option("link", description="Link of the video you wish to download")
+async def yt(ctx:discord.ApplicationContext, link):
+    audiooutput = "output.mp3"
+    youretube = ['https://www.youtube.com/watch?v=', 'https://youtu.be/']
+    if any(keyword in link for keyword in youretube):
+        await ctx.respond("Alright, hold on...")
+        file = Path(audiooutput)
+        if file.is_file():
+            file.unlink()
+        os.system(f'yt-dlp.exe -o "output.%(ext)s" -t mp3 "{link}"')
+        await ctx.respond(file=discord.File(f'{audiooutput}'))
+    else:
+        await ctx.respond("Not a valid link.")
 
 
 
