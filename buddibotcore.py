@@ -20,6 +20,7 @@ import psutil     #psutil - https://github.com/giampaolo/psutil
 import win32process
 import time
 import ffmpeg
+import pyautogui
 
 # ---- variables cause its annoying to have them clutter my shyt ----
 hytale = "https://cdn.discordapp.com/attachments/1461513081459970236/1461762256168550648/image.png?ex=696bbbb0&is=696a6a30&hm=fbb800c1305463a1d18cc85e353cf1eac3e1ce1c3e84dd4b492b16a5c6b7b1fe&"
@@ -73,7 +74,7 @@ restartin = [
     "You know who else loves troubleshooting! My Buddie!!!",
     "Well, off to hang myself!",
     "Okie dokie. By the way, shoutouts to Spazbot. C:",
-    "Okie dokie. By the way, shoutouts to Gummy's Bank Inc. C:",
+    "What the helly",
     "Well, okay. Bye-bye.",
     "What?! NO, DUDE!!!!!!!!!!!",
     "My head's spinning...",
@@ -88,13 +89,13 @@ intents.presences = True # Enable the presence intent
 intents.members = True # Often needed for other functions, good practice to include
 intents.message_content = True # ok maybe remove this later
 
-client = discord.Client(intents=intents)
+bot = discord.Bot(intents=intents)
 
 load_dotenv()
 DATA_FILE = 'currency.json'
-# buddie: 547900581692309521
-# mell: 1078788946609324175
-bot = discord.Bot(owner_id=547900581692309521)
+# ids:
+# buddie - 547900581692309521
+# mell: - 1078788946609324175
 
 # they look the exact same, but take my word for it they arent
 def load_data():
@@ -152,28 +153,36 @@ admin = bot.create_group("admin","admin tools")
 # ------------- event shyt
 
 @bot.event
-async def on_command_error(ctx: commands.Context, error: commands.CommandError):
+async def on_application_command_error(ctx: discord.ApplicationContext, error: discord.DiscordException):
+
     error = getattr(error, "original", error)
-    if hasattr(ctx.command, 'on_error'):
+    
+    if isinstance(error, commands.CommandOnCooldown):
+        playsound('error.wav', block=False)
+        await ctx.respond("hey hey hey. wait just a minute. this command's on cooldown! go play MineCrap, or whatever you kids play nowadays.", ephemeral=True)
+
+    elif hasattr(ctx.command, 'on_error'):
         playsound('error.wav', block=False)
         await ctx.send(f"oh, i guess buddie flipped up something. go tell him about this error: `{error}`")
 
-    if isinstance(error, commands.MissingRequiredArgument):
+    elif isinstance(error, commands.MissingRequiredArgument):
         playsound('error.wav', block=False)
-        await ctx.send(f"Error: hey, you're missing the argument `{error.param.name}`! please, use the command properly.")
+        await ctx.send(f"Error: hey, you're missing the argument `{error.param.name}`! please, use the command properly.", ephemeral=true)
+
     elif isinstance(error, commands.MissingPermissions):
         playsound('error.wav', block=False)
-        await ctx.send("Error: whoops, you don't have enough permissions! go get /op'd, right about now.")
+        await ctx.send("Error: whoops, you don't have enough permissions! i don't know how you got this error, since there's no commands that need permissions, so please ping buddie and tell him to fix his shyt")
+
     else:
         playsound('error.wav', block=False)
-        await ctx.send(f"ohhh shoot i just had an error: `{error}`. bot didn't crash, but i recommend you ping me, budie double you, for this.")
+        await ctx.send(f"ohhh shoot i just had an error: `{error}`. \nbot didn't crash, but i recommend you ping budie double you for this.")
 
 @tasks.loop(seconds=20) # ts broken for whatever reason
 async def status_task(self) -> None:
         statuses = [
             'Now featuring: Screenshots!', 
             'Also try: SpazBot',
-            'Also try: Gummy\'s Bank INC.',
+            'Also try... wait, what do you mean this status got removed?',
             'What? What do you mean? I didn\'t do that.',
             'straight up budding it',
             'Committing crimes...',
@@ -337,10 +346,12 @@ async def gamba(ctx):
         await ctx.respond(f'{random.choice(gambawin)} got {gamba} dollary doos, current balance: {playermonies}')
         
 
-@currency.command(name="supergamba", description="instead of min and max being 2k, it's 10k. High risk, high reward!")
+@currency.command(name="supergamba", description="instead of min and max being 2k, it's 10k. High risk, high reward! [40s cooldown]")
+@commands.cooldown(1, 40, commands.BucketType.user)
 async def supergamba(ctx):
     gamba = random.randint(-10000,10000)
     playermonies = get_value(ctx.user.id, 'dollarys')
+    print(playermonies)
     if playermonies <= 0:
         await ctx.respond(f'whoops, sorry buddy, but you have {playermonies} dollary doos. cant supergamble in debt.')
         return
@@ -403,7 +414,7 @@ async def hello(ctx):
 @bot.command(name="whatareyoudoing", description="Ask the bot what he's doing")
 async def wyd(ctx: discord.ApplicationContext):
     gaming = [
-        ":video_game: Playing [**BombSquad: Gummy's Overhaul**](https://gamejolt.com/games/gummysoverhaul/923618) <:bluecap_boyfriend:1461469456399073332>",
+        ":video_game: Playing [**DELTARUNE**](https://www.deltarune.com/) <:bluecap_boyfriend:1461469456399073332>",
         ":video_game: Playing [**Bombsquda**](https://github.com/MellBoii1/bombsquda) <:bluecap_boyfriend:1461469456399073332>",
         "lowk doing something that i cannot say rn",
         "Being tested on. Help me",
@@ -457,7 +468,7 @@ async def heroin(ctx: discord.ApplicationContext):
 async def sixtynine(ctx: discord.ApplicationContext):
     sixer = random.randint(-100,100)
     result = "Number #" + str(sixer)
-
+    await ctx.defer()
     while sixer != 69:
         sixer = random.randint(-100,100)
         result = result + " Number #" + str(sixer)
@@ -516,7 +527,7 @@ async def help(ctx: discord.ApplicationContext):
 async def friend(ctx:discord.ApplicationContext):
     await ctx.respond(random.choice (friendquotes))
 
-@buddie.command(name="screenie", description="See Buddie's screen (He will be alerted) (I am not liable for anything that you see)")
+@buddie.command(name="screenie", description="See Buddie's screen (He will be alerted) (I am not liable for anything that you see) [15s cooldown]")
 @commands.cooldown(1, 15, commands.BucketType.user) 
 async def scren(ctx:discord.ApplicationContext):
     # python allows for defs inside defs, so just put it here
@@ -549,10 +560,10 @@ async def lamar(ctx:discord.ApplicationContext):
 
 @bot.command(name="ai", description="Talk to Buddie-bot, powered by Merl AI")
 async def merl(ctx:discord.ApplicationContext, message):
-    await ctx.respond("I don't know.")
+    await ctx.respond(f"-# {ctx.author} said: {message}\nI don't know.")
 
-@bot.command(name="scary_countdown", description="The countdown of doom! Gyulp.")
-@commands.cooldown(1, 15, commands.BucketType.user) 
+@bot.command(name="scary_countdown", description="The countdown of doom! Gyulp. [20s cooldown]")
+@commands.cooldown(1, 20, commands.BucketType.user) 
 async def coutning(ctx:discord.ApplicationContext):
     await ctx.respond("10...")
     time.sleep(2)
@@ -576,71 +587,44 @@ async def coutning(ctx:discord.ApplicationContext):
     time.sleep(10)
     await ctx.send("https://img.freepik.com/free-psd/single-yellow-potato-closeup-studio-shot_191095-85935.jpg?semt=ais_user_personalization&w=740&q=80")
 
-@bot.event
-async def on_application_command_error(ctx: discord.ApplicationContext, error: discord.DiscordException):
-    if isinstance(error, commands.CommandOnCooldown):
-        await ctx.respond("slow down there, pardner. this command is on cooldown for 15 seconds. go away.", ephemeral=True)
-    else:
-        raise error  # Here we raise other errors to ensure they aren't ignored
-
 @bot.command(name="cudix_facts", description="CUDIX's seemingly random facts.")
 async def cudih(ctx:discord.ApplicationContext):
     await ctx.respond("Detroit Lions own the Chicago Bears and Caleb Williams is not iceman\n\n\n\n\n\n... what? \"what does this mean\"...? i don't know either.")
 
-@bot.command(name="ytmp3_download", description="Download and send a YouTube video as an MP3! Provided by yt-dlp.")
+
+@bot.command(name="ytmp3_download", description="Download and send a YouTube video as an MP3! Provided by yt-dlp. [120s cooldown]")
+@commands.cooldown(1, 120, commands.BucketType.user) 
 @discord.option("link", description="Link of the video you wish to download")
 async def yt(ctx:discord.ApplicationContext, link):
     audiooutput = "output.mp3"
     youretube = ['https://www.youtube.com/watch?v=', 'https://youtu.be/']
     if any(keyword in link for keyword in youretube):
-        await ctx.respond("Alright, hold on...")
+        await ctx.respond("Alright, hold on... This might take a bit, so just relax, and be patient.")
         file = Path(audiooutput)
         if file.is_file():
             file.unlink()
         os.system(f'yt-dlp.exe -o "output.%(ext)s" -t mp3 "{link}"')
-        await ctx.respond(file=discord.File(f'{audiooutput}'))
+        if os.stat('output.mp3').st_size >= 10000000:
+            await ctx.respond("File output was too big to upload to Discord. What kinda audio were you trying to download, anyways?!")
+            return
+        else:
+            await ctx.respond(file=discord.File(f'{audiooutput}'))
     else:
         await ctx.respond("Not a valid link.")
 
+@bot.command(name="webcam", description="See Buddie's... webcam...? I'm not too sure about this one.")
+async def trolo(ctx:discord.ApplicationContext):
+    await ctx.respond("https://cdn.discordapp.com/attachments/1461513081459970236/1474201797450272808/trolfeis_mirror_selfie_lmaooo.jpg?ex=6998fce9&is=6997ab69&hm=a802139e38b7ea34cba0878715310bd54149b2be236588b6b88b31b9a51b7ecb&")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@admin.command(name="buddie_cursor", description="Move the cursor on Buddie's screen to mess with him (X and Y values)")
+async def cursoring(ctx:discord.ApplicationContext, why: int, ex: int):
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.")
+    else:
+        playsound('cursor.wav', block=False)
+        print("look at you. lookin at the console to see if it really happened. yes, buddie. your cursor did move. you're not insane. now go back to playing minecraft. fucking shit for brains.")
+        pyautogui.moveRel(ex, why)
+        await ctx.respond("done") 
 
 bot.run(os.getenv('TOKEN')) # type: ignore
-
-# pycord tutorial shyt below:
-
-#umm ima add it l8tr
