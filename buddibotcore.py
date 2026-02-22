@@ -483,7 +483,7 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.") #change the description every update
+@testing.command(name="refresh", description="Refreshes your commands, because Discord is stupid.") #change the description every update
 async def ref(ctx: discord.ApplicationContext):                                                #to make the command say its outdated and make it
     await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")    #force refresh your commands list
 
