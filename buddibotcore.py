@@ -22,6 +22,7 @@ import time
 import ffmpeg
 import pyautogui
 import keyboard
+import webbrowser
 
 # ---- variables cause its annoying to have them clutter my shyt ----
 hytale = "https://cdn.discordapp.com/attachments/1461513081459970236/1461762256168550648/image.png?ex=696bbbb0&is=696a6a30&hm=fbb800c1305463a1d18cc85e353cf1eac3e1ce1c3e84dd4b492b16a5c6b7b1fe&"
@@ -483,7 +484,7 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes your commands, because Discord is stupid.") #change the description every update
+@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.") #change the description every update
 async def ref(ctx: discord.ApplicationContext):                                                #to make the command say its outdated and make it
     await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")    #force refresh your commands list
 
@@ -652,5 +653,18 @@ async def WhatTheFuckAreYouDoingToMyPCBro(ctx:discord.ApplicationContext, key):
         playsound('cursor.wav', block=False)
         keyboard.press_and_release(key)
         await ctx.respond("done")
+
+@admin.command(name="buddie_website", description="Opens Chrome and forces Buddie to enter a specific website")
+@discord.option("site", description="Website URL (must have https:// at the beginning)")
+async def webbingsyte(ctx:discord.ApplicationContext, site):
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
+    else:
+        print(f"{ctx.user} opened the website {site} on yo pc")
+        playsound('cursor.wav', block=False)
+        webbrowser.open(site)  # Go to example.com           # Source - https://stackoverflow.com/a/4302041
+        await ctx.respond("done")
+
+
 
 bot.run(os.getenv('TOKEN')) # type: ignore
