@@ -21,6 +21,7 @@ import win32process
 import time
 import ffmpeg
 import pyautogui
+import keyboard
 
 # ---- variables cause its annoying to have them clutter my shyt ----
 hytale = "https://cdn.discordapp.com/attachments/1461513081459970236/1461762256168550648/image.png?ex=696bbbb0&is=696a6a30&hm=fbb800c1305463a1d18cc85e353cf1eac3e1ce1c3e84dd4b492b16a5c6b7b1fe&"
@@ -292,6 +293,7 @@ async def hooneringit(ctx, user: discord.Member, stat, value, hidden: bool):
             elif user.bot:
                 await ctx.respond("that's a bot you bum. go away", ephemeral=True)
             else:
+                print(f"{ctx.user} gave {user} {value} {stat}")
                 set_value(user.id, stat, value)
                 await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}', ephemeral=True)
         else:
@@ -300,6 +302,7 @@ async def hooneringit(ctx, user: discord.Member, stat, value, hidden: bool):
             elif user.bot:
                 await ctx.respond("that's a bot you bum. go away")
             else:
+                print(f"{ctx.user} gave {user} {value} {stat}")
                 set_value(user.id, stat, value)
                 await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}')
 
@@ -480,7 +483,7 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.") #change the description every update
+@testing.command(name="refresh", description="Refreshes your commands, because Discord is stupid.") #change the description every update
 async def ref(ctx: discord.ApplicationContext):                                                #to make the command say its outdated and make it
     await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")    #force refresh your commands list
 
@@ -616,7 +619,7 @@ async def yt(ctx:discord.ApplicationContext, link):
 async def trolo(ctx:discord.ApplicationContext):
     await ctx.respond("https://cdn.discordapp.com/attachments/1461513081459970236/1474201797450272808/trolfeis_mirror_selfie_lmaooo.jpg?ex=6998fce9&is=6997ab69&hm=a802139e38b7ea34cba0878715310bd54149b2be236588b6b88b31b9a51b7ecb&")
 
-
+# the following commands are admin only because god knows what people would do if they weren't :fearful:
 @admin.command(name="buddie_cursor", description="Move the cursor on Buddie's screen to mess with him (X and Y values)")
 async def cursoring(ctx:discord.ApplicationContext, why: int, ex: int):
     if admino_only(ctx) == False:
@@ -626,5 +629,28 @@ async def cursoring(ctx:discord.ApplicationContext, why: int, ex: int):
         print("look at you. lookin at the console to see if it really happened. yes, buddie. your cursor did move. you're not insane. now go back to playing minecraft. fucking shit for brains.")
         pyautogui.moveRel(ex, why)
         await ctx.respond("done") 
+
+@admin.command(name="buddie_type", description="It does what it says on the tin. Types on Buddie's end. gyulp")
+@discord.option("text", description="tyope on budie keybor lol")
+async def WhatTheFuckAreYouDoingToMyPCBro(ctx:discord.ApplicationContext, text):
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
+    else:
+        if len(text) >= 60:
+            await ctx.respond("go away loser", ephemeral=True)
+        else:
+            playsound('cursor.wav', block=False)
+            keyboard.write(text,delay=0)
+            await ctx.respond("done")
+
+@admin.command(name="buddie_key", description="It does what it says on the tin. Presses a key on Buddie's end. gyulp")
+@discord.option("key", description="Important keys: 'f11','esc','space','backspace'")
+async def WhatTheFuckAreYouDoingToMyPCBro(ctx:discord.ApplicationContext, key):
+    if admino_only(ctx) == False:
+        await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
+    else:
+        playsound('cursor.wav', block=False)
+        keyboard.press_and_release(key)
+        await ctx.respond("done")
 
 bot.run(os.getenv('TOKEN')) # type: ignore

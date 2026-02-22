@@ -5,3 +5,4 @@ python-dotenv
 playsound3
 mss
 ffmpeg-python
+keyboard
