@@ -665,6 +665,13 @@ async def webbingsyte(ctx:discord.ApplicationContext, site):
         webbrowser.open(site)  # Go to example.com           # Source - https://stackoverflow.com/a/4302041
         await ctx.respond("done")
 
+# ok no more admino comands
+@bot.command(name="github_info", description="Link to the Github page for this bot")
+async def leenk(ctx:discord.ApplicationContext):
+    await ctx.respond("[Here!](https://github.com/gamer123566/buddie-bot)")
+
+
+
 
 
 bot.run(os.getenv('TOKEN')) # type: ignore
