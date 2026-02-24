@@ -1,8 +1,13 @@
-time
-pycord
+py-cord
+asyncio
 pywin32
 python-dotenv
 playsound3
 mss
 ffmpeg-python
 keyboard
+pyautogui
+win32gui
+webbrowser
+psutil
+pathlib
