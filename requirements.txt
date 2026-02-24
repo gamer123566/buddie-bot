@@ -7,7 +7,6 @@ mss
 ffmpeg-python
 keyboard
 pyautogui
-win32gui
-webbrowser
+pywin32
 psutil
 pathlib
