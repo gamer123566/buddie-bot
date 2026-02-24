@@ -419,7 +419,7 @@ async def hello(ctx):
 async def wyd(ctx: discord.ApplicationContext):
     gaming = [
         ":video_game: Playing [**DELTARUNE**](https://www.deltarune.com/) <:bluecap_boyfriend:1461469456399073332>",
-        ":video_game: Playing [**Bombsquda**](https://github.com/MellBoii1/bombsquda) <:bluecap_boyfriend:1461469456399073332>",
+        ":video_game: Playing [**BombSquda**](https://github.com/MellBoii1/bombsquda) <:bluecap_boyfriend:1461469456399073332>",
         "lowk doing something that i cannot say rn",
         "Being tested on. Help me",
         "william afton screaming in hell.ogg",
