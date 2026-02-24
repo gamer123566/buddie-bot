@@ -178,7 +178,7 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error: d
     else:
         playsound('error.wav', block=False)
         ctx.command.reset_cooldown(ctx)
-        await ctx.respond(f"ohhh shoot i just had an error: `{error}`. \nbot didn't crash, but i recommend you ping budie double you for this.")
+        await ctx.respond(f"ohhh shoot i just had an error: `{error}`. \nbot didn't crash, but i recommend you ping budie double you for this.\n-# don't ping if it's an unknown integration error. i can't fix that. just suck it up and try the command again.")
         raise error # We must raise the error so the Buddie of the Double Us can fix the error.
 
 @tasks.loop(seconds=20) # ts broken for whatever reason
