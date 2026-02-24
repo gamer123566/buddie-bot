@@ -165,19 +165,21 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error: d
 
     elif hasattr(ctx.command, 'on_error'):
         playsound('error.wav', block=False)
-        await ctx.send(f"oh, i guess buddie flipped up something. go tell him about this error: `{error}`")
+        await ctx.respond(f"oh, i guess buddie flipped up something. go tell him about this error: `{error}`")
 
     elif isinstance(error, commands.MissingRequiredArgument):
         playsound('error.wav', block=False)
-        await ctx.send(f"Error: hey, you're missing the argument `{error.param.name}`! please, use the command properly.", ephemeral=true)
+        await ctx.respond(f"Error: hey, you're missing the argument `{error.param.name}`! please, use the command properly.", ephemeral=true)
 
     elif isinstance(error, commands.MissingPermissions):
         playsound('error.wav', block=False)
-        await ctx.send("Error: whoops, you don't have enough permissions! i don't know how you got this error, since there's no commands that need permissions, so please ping buddie and tell him to fix his shyt")
+        await ctx.respond("Error: whoops, you don't have enough permissions! i don't know how you got this error, since there's no commands that need permissions, so please ping buddie and tell him to fix his shyt")
 
     else:
         playsound('error.wav', block=False)
-        await ctx.send(f"ohhh shoot i just had an error: `{error}`. \nbot didn't crash, but i recommend you ping budie double you for this.")
+        ctx.command.reset_cooldown(ctx)
+        await ctx.respond(f"ohhh shoot i just had an error: `{error}`. \nbot didn't crash, but i recommend you ping budie double you for this.")
+        raise error # We must raise the error so the Buddie of the Double Us can fix the error.
 
 @tasks.loop(seconds=20) # ts broken for whatever reason
 async def status_task(self) -> None:
@@ -432,7 +434,7 @@ async def wyd(ctx: discord.ApplicationContext):
 
 @bot.command(name="buddieinfo", description="Tell me about Buddie.")
 async def brodie(ctx: discord.ApplicationContext):
-    await ctx.respond("<:goofy_guy:1461469461784563898> Alright, if you say so! Here's his bio:\nspanish / english\num, no thank you!\nhttps://web-buddie.neocities.org/\nyou should keep reply ping on when talking to me unless you're just saying \"ok\"\n\n\nshoutouts to kevin eleven")
+    await ctx.respond("<:goofy_guy:1461469461784563898> Alright, if you say so! Here's his bio:\nspanish / english\nNow remastered!\nhttps://web-buddie.neocities.org/\nyou should keep reply ping on when talking to me unless you're just saying \"ok\"\n\n\nshoutouts to kevin eleven")
 
 @bot.command(name="ping", description="how ass is my wifi rn")
 async def ping(ctx: discord.ApplicationContext):
@@ -484,7 +486,7 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.") #change the description every update
+@testing.command(name="refresh", description="Refreshes your commands, because Discord is stupid.") #change the description every update
 async def ref(ctx: discord.ApplicationContext):                                                #to make the command say its outdated and make it
     await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")    #force refresh your commands list
 
@@ -505,11 +507,9 @@ async def dox(ctx: discord.ApplicationContext):
     await ctx.respond(str(num1) + "." + str(num2) + "." + str(num3) + "." + str(num4) + "." + str(num5) + "...Have fun!!")
 
 @bot.command(name="speak", description="says the things that you put in")
-async def add(ctx, text: discord.Option(str)): # type: ignore
+async def speak(ctx, text: discord.Option(str)): # type: ignore
   # you can use them as they were actual integers
-  if text == "@everyone":
-    await ctx.respond("Are we deadass")
-  elif text == "@here":
+  if ['@everyone', '@here'] in text:
     await ctx.respond("Hey, uh, don't fucking do that.")
   else:
     check = len(text)
@@ -517,7 +517,7 @@ async def add(ctx, text: discord.Option(str)): # type: ignore
     if check >= 1999:
         await ctx.respond("Text is too long. Couldn't send.", ephemeral=True)
     else:
-        await ctx.respond(f"{text}")
+        await ctx.respond(text)
 
 @image.command(name="buddie", description="Fetch a random image of Buddie. :]")
 async def budzo(ctx: discord.ApplicationContext):
@@ -534,7 +534,7 @@ async def friend(ctx:discord.ApplicationContext):
 @buddie.command(name="screenie", description="See Buddie's screen (He will be alerted) (I am not liable for anything that you see) [15s cooldown]")
 @commands.cooldown(1, 15, commands.BucketType.user) 
 async def scren(ctx:discord.ApplicationContext):
-    # python allows for defs inside defs, so just put it here
+    # python allows for defs inside defs, so just put it her
     def on_exists(fname: str) -> None:
         """Callback example when we try to overwrite an existing screenshot."""
         file = Path(fname)
@@ -547,7 +547,7 @@ async def scren(ctx:discord.ApplicationContext):
         print(f'{ctx.channel.name}, at server {ctx.guild.name}')
         playsound('screenshot.wav', block=False)
     await ctx.respond(file=discord.File(f'{filename}'))
-    print()
+    # print()
 
 @bot.command(name="rizzmeter", description="How much rizz do you have, according to randint?")
 async def rizzy(ctx: discord.ApplicationContext):
@@ -570,25 +570,25 @@ async def merl(ctx:discord.ApplicationContext, message):
 @commands.cooldown(1, 20, commands.BucketType.user) 
 async def coutning(ctx:discord.ApplicationContext):
     await ctx.respond("10...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("9...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("8...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("7...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("6...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("5...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("4...")
-    time.sleep(2)
+    await asyncio.sleep(2)
     await ctx.send("3....")
-    time.sleep(4)
+    await asyncio.sleep(4)
     await ctx.send("2.....")
-    time.sleep(6)
+    await asyncio.sleep(6)
     await ctx.send("1......")
-    time.sleep(10)
+    await asyncio.sleep(10)
     await ctx.send("https://img.freepik.com/free-psd/single-yellow-potato-closeup-studio-shot_191095-85935.jpg?semt=ais_user_personalization&w=740&q=80")
 
 @bot.command(name="cudix_facts", description="CUDIX's seemingly random facts.")
@@ -656,14 +656,20 @@ async def WhatTheFuckAreYouDoingToMyPCBro(ctx:discord.ApplicationContext, key):
 
 @admin.command(name="buddie_website", description="Opens Chrome and forces Buddie to enter a specific website")
 @discord.option("site", description="Website URL (must have https:// at the beginning)")
-async def webbingsyte(ctx:discord.ApplicationContext, site):
+async def webbingsyte(ctx:discord.ApplicationContext, site: str):
     if admino_only(ctx) == False:
         await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
-    else:
-        print(f"{ctx.user} opened the website {site} on yo pc")
-        playsound('cursor.wav', block=False)
-        webbrowser.open(site)  # Go to example.com           # Source - https://stackoverflow.com/a/4302041
-        await ctx.respond("done")
+        return
+    if not site.startswith( ('https://', 'http://') ):
+        await ctx.respond("website doesn't begin with https:// (likely not a website)", ephemeral=True)
+        return
+    if site.startswith('http://'):
+        await ctx.respond("website is insecure (uses http and not https)", ephemeral=True)
+        return
+    print(f"{ctx.user} opened the website {site} on yo pc")
+    playsound('cursor.wav', block=False)
+    webbrowser.open(site)  # Source - https://stackoverflow.com/a/4302041
+    await ctx.respond("done")
 
 # ok no more admino comands
 @bot.command(name="github_info", description="Link to the Github page for this bot")
