@@ -518,7 +518,7 @@ async def sixtynine(ctx: discord.ApplicationContext):
     else:   
         await ctx.respond(result)
 
-@testing.command(name="refresh", description="Refreshes your commands, because Discord is stupid.") #change the description every update
+@testing.command(name="refresh", description="Refreshes commands, because Discord is stupid.") #change the description every update
 async def ref(ctx: discord.ApplicationContext):                                                #to make the command say its outdated and make it
     await ctx.respond("Your commands were already refreshed, or couldn't refresh. Sorry!!")    #force refresh your commands list
 
@@ -717,5 +717,14 @@ async def errorerleing(ctx:discord.ApplicationContext, erorname):
 @image.command(name="tetokasane", description="Various images of Kasane Teto. Very cool. :) (Yes, I did get these from Google Images.)")
 async def tetoling(ctx:discord.ApplicationContext):
     await ctx.respond(random.choice (kasane))
+
+@bot.command(name="mastick_coin", description="Mastick's coin of approval. Basically just a cooler coinflip")
+async def imhooneringit(ctx:discord.ApplicationContext):
+    coin = random.randint(0,1)
+    if coin == 0:
+        await ctx.respond("https://cdn.discordapp.com/attachments/1473404984581296168/1474488991742038149/ezgif-2677d3af0aa0112f.gif?ex=699ff722&is=699ea5a2&hm=9fc8bb15b176632adb569af22f8eefbf0cfe2741a1c3dd59ab5994269d7dc62c&")
+    else:
+        await ctx.respond("https://cdn.discordapp.com/attachments/1473404984581296168/1474488992148754700/ezgif-3275af723423c6a9.gif?ex=699ff722&is=699ea5a2&hm=88e3915c539e299e822126382f2ae93be077e63db295b19db6650ef883c0822c&")
+
 
 bot.run(os.getenv('TOKEN')) # type: ignore

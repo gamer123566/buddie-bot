@@ -23,28 +23,30 @@ get [yt-dlp](https://github.com/yt-dlp/yt-dlp).exe, and put it in the folder whe
 - /buddie screenie
 ### Image commands
 - /image buddie
-- /image lamarjackson
 - /image kaido
 - /image hytaleherobrine
 - /image goony
-- /image tetokasane
 ### All other commands
 - /hello
 - /ping
 - /69finder
-- /scary_countdown
 - /buddieinfo
 - /gyatt
 - /whatareyoudoing
 - /help
-- /rizzmeter
 - /ai
-- /cudix_facts
-- /getip
 - /github_info
 - /speak
 - /friendquote
+### Commands that are my friends's ideas (you can remove these if you want to)
+- /mastick_coin
+- /cudix_facts
+- /rizzmeter
+- /getip
 - /webcam
+- /scary_countdown
+- /image lamarjackson
+- /image tetokasane
 ### Testing commands
 - /testing refresh
 - /testing math
