@@ -51,6 +51,18 @@ budimage = [
         "https://cdn.discordapp.com/attachments/1461513081459970236/1471679296933330986/steamuddie.png?ex=698fcfa6&is=698e7e26&hm=4d909c836e5e9a3c300f3af71e92c5d3585757d64e7a991f934e15fab387603c&",
         "https://cdn.discordapp.com/attachments/1461513081459970236/1473423927043821812/Buddie_Ultimate_PFP.png?ex=69962877&is=6994d6f7&hm=f1611cec7d0cc3aba0d137371acd6819db4b37e95b3e8ceae0956bc0b85623bc&"
     ]
+kasane = [
+    "https://static.wikia.nocookie.net/utau/images/0/01/Teto22.png/revision/latest?cb=20150110230357&path-prefix=es",
+    "https://preview.redd.it/kasane-teto-sv-illustrated-by-sakauchi-waka-v0-jeh7180iknra1.jpg?width=640&crop=smart&auto=webp&s=d84c1b655f9b3ff7ce309bdda00975efbbd9b578",
+    "https://m.media-amazon.com/images/I/613FwkW60mL._AC_UF894,1000_QL80_.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbvzqgNrFhSbk_wBVskLpnslqeN4fcmjPSLw&s",
+    "https://preview.redd.it/teto-birdbrain-v0-p7xz8is56lff1.jpg?width=553&format=pjpg&auto=webp&s=7bf77a4080a49a055633e490b2586b2587845fb5",
+    "https://cdn.discordapp.com/attachments/1475675152032465037/1476097716764545126/image.png?ex=699fe2a0&is=699e9120&hm=aeb5f6dddc23dbc33c24f8b578ca67b95d3d5f8dd1f263b4e0cd9579c37fe218&",
+    "https://www.japanzon.com/208144-product_hd/good-smile-company-pop-up-parade-kasane-teto-l-size-non-scale-pre-painted-figure.jpg",
+    "https://preview.redd.it/art-by-sagami-kasane-teto-attack-form-v0-fs2hvwzkzy7c1.jpeg?width=640&crop=smart&auto=webp&s=c041a5a9779957b321be5f8402804681cdb0f970",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq7s68ARbK7YjbPfFc5NL2AQK8kuk57hEOOg&s",
+    
+]
 friendquotes = [
     "\"Yosh was here\" - Mitsuri",
     "\"erm what the sigma\" - Mell",
@@ -67,7 +79,8 @@ friendquotes = [
     "\"DARK, DARKER, YET DARKER.\" - Gaster, the royal scientist\n.",
     "\"hi guys\" - Goofy Guy",
     "\"Baby horses are juggling Wingstop locations in the middle of San Francisco\" - CUDIX",
-    "\"stop fingering me\" - Niko (Not from OneShot"
+    "\"stop fingering me\" - Niko (Not from OneShot",
+    "\"Hey, you're not part of my Sprites\nget back to that box of yours   immediately\"\n-Ness"
 ]
 restartin = [
     "Oh well, here goes nothing...!",
@@ -160,15 +173,17 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error: d
     error = getattr(error, "original", error)
     
     if isinstance(error, commands.CommandOnCooldown):
-        playsound('error.wav', block=False)
         await ctx.respond("hey hey hey. wait just a minute. this command's on cooldown! go play MineCrap, or whatever you kids play nowadays.", ephemeral=True)
+    
+    elif isinstance(error, discord.errors.NotFound):
+        await ctx.respond("whoops, the command errored. try running it again!")
+        raise error
 
     elif hasattr(ctx.command, 'on_error'):
         playsound('error.wav', block=False)
         await ctx.respond(f"oh, i guess buddie flipped up something. go tell him about this error: `{error}`")
 
     elif isinstance(error, commands.MissingRequiredArgument):
-        playsound('error.wav', block=False)
         await ctx.respond(f"Error: hey, you're missing the argument `{error.param.name}`! please, use the command properly.", ephemeral=true)
 
     elif isinstance(error, commands.MissingPermissions):
@@ -178,7 +193,7 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error: d
     else:
         playsound('error.wav', block=False)
         ctx.command.reset_cooldown(ctx)
-        await ctx.respond(f"ohhh shoot i just had an error: `{error}`. \nbot didn't crash, but i recommend you ping budie double you for this.\n-# don't ping if it's an unknown integration error. i can't fix that. just suck it up and try the command again.")
+        await ctx.respond(f"ohhh shoot i just had an error: \n`{error}` \nbot didn't crash, but i recommend you ping budie double you for this.\n-# don't ping if it's an unknown integration error. i can't fix that. just suck it up and try the command again.")
         raise error # We must raise the error so the Buddie of the Double Us can fix the error.
 
 @tasks.loop(seconds=20) # ts broken for whatever reason
@@ -368,6 +383,23 @@ async def supergamba(ctx):
     else:
         await ctx.respond(f'{random.choice(gambawin)} got {gamba} dollary doos, current balance: {playermonies}')
 
+@currency.command(name="american_roulette", description="It's like Russian Roulette, but every chamber except one is loaded! Gyulp. [60s cooldown]")
+@commands.cooldown(1, 60, commands.BucketType.user)
+async def deathlmfao(ctx):
+    winnings = random.randint(0,9999999)
+    bullet = random.randint(1,6)
+    playermonies = get_value(ctx.user.id, 'dollarys')
+    if playermonies <= 0:
+        await ctx.respond(f'whoops, sorry buddy, but you have {playermonies} dollary doos. cant play russian roulette in debt.')
+        return
+    if bullet == 1:
+        add_value(ctx.user.id, 'dollarys', winnings)
+        newmoniez = playermonies + winnings
+        await ctx.respond(f"Hooray! You survived! Got {winnings}, current balance: {newmoniez}")
+    else:
+        add_value(ctx.user.id, 'dollarys', -999999999)
+        newmoniez = playermonies -999999999
+        await ctx.respond(f"Ouchie mama! You died. Thankfully, the Medic from TF2 was right there to revive you! The medical bill is 999,999,999 dollary doos, though. Balance: {newmoniez}")
 # If this fails, add 'async' to it
 def get_hwnds_by_exe_name(exe_name: str):
     """
@@ -507,17 +539,19 @@ async def dox(ctx: discord.ApplicationContext):
     await ctx.respond(str(num1) + "." + str(num2) + "." + str(num3) + "." + str(num4) + "." + str(num5) + "...Have fun!!")
 
 @bot.command(name="speak", description="says the things that you put in")
-async def speak(ctx, text: discord.Option(str)): # type: ignore
+async def speak(ctx, texter): # type: ignore
   # you can use them as they were actual integers
-  if ['@everyone', '@here'] in text:
+  if "@everyone" in texter:
     await ctx.respond("Hey, uh, don't fucking do that.")
+  elif "@here" in texter:
+    await ctx.respond("Don't ever touch a keyboard ever again")
   else:
-    check = len(text)
+    check = len(texter)
 
     if check >= 1999:
         await ctx.respond("Text is too long. Couldn't send.", ephemeral=True)
     else:
-        await ctx.respond(text)
+        await ctx.respond(texter)
 
 @image.command(name="buddie", description="Fetch a random image of Buddie. :]")
 async def budzo(ctx: discord.ApplicationContext):
@@ -542,10 +576,10 @@ async def scren(ctx:discord.ApplicationContext):
             file.unlink()
     # run it ONCE the command is called
     with mss.mss() as sct:
+        playsound('screenshot.wav', block=False)
         filename = sct.shot(output="LatestScreenshot.png", callback=on_exists)
         print("Took a screenshot at:")
         print(f'{ctx.channel.name}, at server {ctx.guild.name}')
-        playsound('screenshot.wav', block=False)
     await ctx.respond(file=discord.File(f'{filename}'))
     # print()
 
@@ -612,7 +646,7 @@ async def yt(ctx:discord.ApplicationContext, link):
             await ctx.respond("File output was too big to upload to Discord. What kinda audio were you trying to download, anyways?!")
             return
         else:
-            await ctx.respond(file=discord.File(f'{audiooutput}'))
+            await ctx.respond(f"Original link: {link}", file=discord.File(f'{audiooutput}'))
     else:
         await ctx.respond("Not a valid link.")
 
@@ -676,8 +710,12 @@ async def webbingsyte(ctx:discord.ApplicationContext, site: str):
 async def leenk(ctx:discord.ApplicationContext):
     await ctx.respond("[Here!](https://github.com/gamer123566/buddie-bot)")
 
+@testing.command(name="intentional_error", description="lol errorz")
+async def errorerleing(ctx:discord.ApplicationContext, erorname):
+    raise NameError(erorname)
 
-
-
+@image.command(name="tetokasane", description="Various images of Kasane Teto. Very cool. :) (Yes, I did get these from Google Images.)")
+async def tetoling(ctx:discord.ApplicationContext):
+    await ctx.respond(random.choice (kasane))
 
 bot.run(os.getenv('TOKEN')) # type: ignore

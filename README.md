@@ -6,7 +6,7 @@ It's a bot. Made by Buddie. You'd never see it comin.
 ## Invite link
 https://discord.com/oauth2/authorize?client_id=1461469020753494196&permissions=563087392688192&integration_type=0&scope=applications.commands+bot (i try to keep it open most of the time but if it's off it's probably 'cause my pc shut off)
 ## Dependencies
-[yt-dlp](https://github.com/yt-dlp/yt-dlp).exe, if you want /ytmp3_download to work, else you can just delete that command and delete import ffmpeg too
+get [yt-dlp](https://github.com/yt-dlp/yt-dlp).exe, and put it in the folder where buddibotcore.py is, if you want /ytmp3_download to work, else you can just delete that command and delete import ffmpeg too
 
 ## Commands, at the time of writing:
 ### Currency-related commands
@@ -17,6 +17,7 @@ https://discord.com/oauth2/authorize?client_id=1461469020753494196&permissions=5
 - /currency evilwork
 - /currency gamba
 - /currency supergamba
+- /currency american_roulette
 ### Commands that do stuff with Buddie's PC
 - /buddie music
 - /buddie screenie
@@ -26,6 +27,7 @@ https://discord.com/oauth2/authorize?client_id=1461469020753494196&permissions=5
 - /image kaido
 - /image hytaleherobrine
 - /image goony
+- /image tetokasane
 ### All other commands
 - /hello
 - /ping
@@ -39,9 +41,19 @@ https://discord.com/oauth2/authorize?client_id=1461469020753494196&permissions=5
 - /ai
 - /cudix_facts
 - /getip
+- /github_info
+- /speak
+- /friendquote
+- /webcam
 ### Testing commands
 - /testing refresh
 - /testing math
+- /testing intentional_error
 ### Admin commands (Only for Bot admins, see generated currency.json, admino value (this includes the ones in currency related commands)
 - /admin resetto
 - /admin shutup
+### Admin-Buddie commands (Buddie commands that would be kiiinda dangerous if they were used by other people)
+- /admin buddie_key
+- /admin buddie_website
+- /admin buddie_cursor
+- /admin buddie_type
