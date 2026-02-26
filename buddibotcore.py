@@ -96,7 +96,10 @@ restartin = [
     "What? What do you mean I have to kill myself?",
     "Oh well.",
     "Literally Roblox is too hard!!",
-    "https://cdn.discordapp.com/attachments/1471252400999239895/1471253871698645186/roblock_hard.mov?ex=6990e671&is=698f94f1&hm=6ebbe6d2549fcb6e449dfec46f53ffa923528a460444bfbb1c70d26b41efbd53&"
+    "https://cdn.discordapp.com/attachments/1471252400999239895/1471253871698645186/roblock_hard.mov?ex=6990e671&is=698f94f1&hm=6ebbe6d2549fcb6e449dfec46f53ffa923528a460444bfbb1c70d26b41efbd53&",
+    "Ah, shit! Here we go again.",
+    "This better be worth it, buddy!",
+    "YOU COULD NOT COMPREHEND THE TRUE NATURE OF /admin resetto'S ATTACK!\n-1hp"
 ]
 # -------essentials
 intents = discord.Intents.default()
@@ -151,7 +154,12 @@ def admino_only(ctx):
     else:
         return True
 
-
+def coinflip():
+    coin = random.randint(0,1)
+    if coin == 0:
+        return False
+    else:
+        return True
 
 # command groups
 testing = bot.create_group("testing", "testing stuff")
@@ -175,10 +183,6 @@ async def on_application_command_error(ctx: discord.ApplicationContext, error: d
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.respond("hey hey hey. wait just a minute. this command's on cooldown! go play MineCrap, or whatever you kids play nowadays.", ephemeral=True)
     
-    elif isinstance(error, discord.errors.NotFound):
-        await ctx.respond("whoops, the command errored. try running it again!")
-        raise error
-
     elif hasattr(ctx.command, 'on_error'):
         playsound('error.wav', block=False)
         await ctx.respond(f"oh, i guess buddie flipped up something. go tell him about this error: `{error}`")
@@ -296,33 +300,28 @@ async def work(ctx):
     add_value(ctx.user.id, 'dollarys', 500)
     await ctx.respond(f'{random.choice(workign)} {get_value(ctx.user.id, 'dollarys')}')
 
-@admin.command(name="give", description="assign a stat to a user")
+@admin.command(name="set", description="assign a stat to a user")
 @discord.option("stat", description="What stat? [STATS: dollarys, admino]")
 @discord.option("user", description="Who should recieve it?")
-@discord.option("value", description="How much, or what?")
-@discord.option("hidden", description="Should it be hidden?", required=False, default=True, input_type=bool)
+@discord.option("value", description="What should it be?", required=True,)
+@discord.option("hidden", description="Hide the message?", required=False, default=True, input_type=bool)
 async def hooneringit(ctx, user: discord.Member, stat, value, hidden: bool):
     if admino_only(ctx) == False:
         await ctx.respond("what do you think you're doing. huh. non-admin. go away. freakin loser.", ephemeral=True)
-    else:
-        if hidden == True:
-            if user.id == ctx.bot.user.id:
-                await ctx.respond("yeah right. in your dreams.", ephemeral=True)
-            elif user.bot:
-                await ctx.respond("that's a bot you bum. go away", ephemeral=True)
-            else:
-                print(f"{ctx.user} gave {user} {value} {stat}")
-                set_value(user.id, stat, value)
-                await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}', ephemeral=True)
-        else:
-            if user.id == ctx.bot.user.id:
-                await ctx.respond("yeah right. in your dreams.")
-            elif user.bot:
-                await ctx.respond("that's a bot you bum. go away")
-            else:
-                print(f"{ctx.user} gave {user} {value} {stat}")
-                set_value(user.id, stat, value)
-                await ctx.respond(f'gave {user} {value} {stat}, their current balance is: {get_value(user.id, 'dollarys')}')
+        return
+    if user.id == ctx.bot.user.id:
+        await ctx.respond("yeah right. in your dreams.", ephemeral=True)
+        return
+    if user.bot:
+        await ctx.respond("that's a bot you bum. go away", ephemeral=True)
+        return
+    print(f"{ctx.user} set {user}'s {stat} to {value}")
+    if value.isdigit():
+        value = int(value)
+    if value in ['True', 'False']:
+        value = eval(value)
+    set_value(user.id, stat, value)
+    await ctx.respond(f'set {user}\'s **{stat}** to `{value}`, their **{stat}** is now: `{get_value(user.id, stat)}`', ephemeral=hidden)
 
 @admin.command(name="reset_stats", description="Reset someone's stats. Feeling good yet?")
 @discord.option("user", description="Who?")
@@ -336,7 +335,8 @@ async def take(ctx, user: discord.Member):
             await ctx.respond("that's a bot you bum. go away", ephemeral=True)
         else:
             set_value(user.id, 'dollarys', 100)
-            await ctx.respond(f'reset {user}\'s dollary doos, their current balance is: {get_value(user.id, 'dollarys')}', ephemeral=True)
+            set_value(user.id, 'admino', False)
+            await ctx.respond(f'reset {user}\'s dollary doos, their current balance is: {get_value(user.id, 'dollarys')}, and their admino is {get_value(user.id, 'dollarys')}', ephemeral=True)
 
 # don't work (and maybe like die)
 @currency.command(name="evilwork", description="remain unemployed (most boring gameplay imaginable)")
@@ -400,6 +400,21 @@ async def deathlmfao(ctx):
         add_value(ctx.user.id, 'dollarys', -999999999)
         newmoniez = playermonies -999999999
         await ctx.respond(f"Ouchie mama! You died. Thankfully, the Medic from TF2 was right there to revive you! The medical bill is 999,999,999 dollary doos, though. Balance: {newmoniez}")
+
+@currency.command(name="give", description="Share some of your dollary doos with your friends [60s cooldown]")
+@commands.cooldown(1, 60, commands.BucketType.user)
+async def givingthings(ctx, reciever: discord.Member, amount: int):
+    playermonies = get_value(ctx.user.id, 'dollarys')
+    givingmonies = get_value(reciever.id, 'dollarys')
+    evilamount = -abs(amount)
+    if playermonies <= amount:
+        await ctx.respond("whoops, you don't have enough money to do that!", ephemeral=True)
+    else:
+        add_value(reciever.id, 'dollarys', amount)
+        add_value(ctx.user.id, 'dollarys', (evilamount))
+        await ctx.respond(f"successfully gave {amount} dollary doos to {reciever.mention}! their current balance is: {get_value(reciever.id, 'dollarys')}")
+
+
 # If this fails, add 'async' to it
 def get_hwnds_by_exe_name(exe_name: str):
     """
@@ -720,8 +735,7 @@ async def tetoling(ctx:discord.ApplicationContext):
 
 @bot.command(name="mastick_coin", description="Mastick's coin of approval. Basically just a cooler coinflip")
 async def imhooneringit(ctx:discord.ApplicationContext):
-    coin = random.randint(0,1)
-    if coin == 0:
+    if coinflip() == False:
         await ctx.respond("https://cdn.discordapp.com/attachments/1473404984581296168/1474488991742038149/ezgif-2677d3af0aa0112f.gif?ex=699ff722&is=699ea5a2&hm=9fc8bb15b176632adb569af22f8eefbf0cfe2741a1c3dd59ab5994269d7dc62c&")
     else:
         await ctx.respond("https://cdn.discordapp.com/attachments/1473404984581296168/1474488992148754700/ezgif-3275af723423c6a9.gif?ex=699ff722&is=699ea5a2&hm=88e3915c539e299e822126382f2ae93be077e63db295b19db6650ef883c0822c&")

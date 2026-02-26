@@ -12,12 +12,13 @@ get [yt-dlp](https://github.com/yt-dlp/yt-dlp).exe, and put it in the folder whe
 ### Currency-related commands
 - /currency balance
 - /currency workin
-- /admin give
+- /admin set
 - /admin reset_stats
 - /currency evilwork
 - /currency gamba
 - /currency supergamba
 - /currency american_roulette
+- /currency give
 ### Commands that do stuff with Buddie's PC
 - /buddie music
 - /buddie screenie
