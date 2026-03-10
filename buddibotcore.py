@@ -61,8 +61,7 @@ kasane = [
     "https://cdn.discordapp.com/attachments/1475675152032465037/1476097716764545126/image.png?ex=699fe2a0&is=699e9120&hm=aeb5f6dddc23dbc33c24f8b578ca67b95d3d5f8dd1f263b4e0cd9579c37fe218&",
     "https://www.japanzon.com/208144-product_hd/good-smile-company-pop-up-parade-kasane-teto-l-size-non-scale-pre-painted-figure.jpg",
     "https://preview.redd.it/art-by-sagami-kasane-teto-attack-form-v0-fs2hvwzkzy7c1.jpeg?width=640&crop=smart&auto=webp&s=c041a5a9779957b321be5f8402804681cdb0f970",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq7s68ARbK7YjbPfFc5NL2AQK8kuk57hEOOg&s",
-    
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq7s68ARbK7YjbPfFc5NL2AQK8kuk57hEOOg&s",  
 ]
 friendquotes = [
     "\"Yosh was here\" - Mitsuri",
@@ -149,6 +148,80 @@ punchline = [
     'the mirror shattered!',
 ]
 
+potatoe = [
+    "I think we can put our differences behind us... for science... you monster. ",
+    "Oh, it's you. ",
+    "It's been a long time. How have you been? ",
+    "I've been *really* busy being dead. You know, after you *murdered* me! ",
+    "Oh. Hi. So. How are you holding up? BECAUSE I'M A POTATO! ",
+    "Well done. Here are the test results: You are a horrible person. I'm serious, that's what it says: A horrible person. We weren't even testing for that. Don't let that \"horrible person\" thing discourage you. It's just a data point. If it makes you feel any better, science has now validated your birth mother's decision to abandon you on a doorstep. ",
+    "I want to congratulate you on beating the odds and somehow managing to pack on a few pounds. ",
+    "I hope you brought something stronger than a portal gun this time. Otherwise, I'm afraid you're about to become the immediate past president of the Being Alive club. Ha ha. ",
+    "Well, this is the part where he kills us. ",
+    "Yeah. take the lemons! ",
+    "Oh, I like this guy. ",
+    "Look at you, soaring through the air like an eagle... piloting a blimp. ",
+    "I went and spoke with the door mainframe. Let's just say he won't be... well, living anymore. Anyway. Back to testing! ",
+    "For the record, you are adopted and that's terrible, just work with me. ",
+    "I feel awful about that surprise. Tell you what, let's give your parents a call right now. [The birth parents you are trying to reach do not love you. Please hang up.] Oh, that's sad. But impressive. Maybe they worked at the phone company. ",
+    "I suppose we could just sit in this room and glare at each other until somebody drops dead, but I have a better idea. ",
+    "It's your old friend, deadly neurotoxin. If I were you, I'd take a deep breath. And hold it. ",
+    "I hate you so much. ",
+    "That's funny, I don't feel corrupt. In fact, I feel pretty good. ",
+    "Core transfer? Oh, you are kidding me. ",
+    "Do NOT plug that little idiot into MY mainframe. ",
+    "Don't. Do it. ",
+    "Oh, it will. Believe me, it will. ",
+    "I know you. ",
+    "The engineers tried everything to make me... behave. To slow me down. Once, they even attached an Intelligence Dampening Sphere on me. It clung to my brain like a tumor, generating an endless stream of terrible ideas. ",
+    "You're not just a regular moron. You were DESIGNED to be a moron. ",
+    "You're the moron they built to make me an idiot! ",
+    "You know, being Caroline taught me a valuable lesson. I *thought* you were my greatest enemy, when all along you were my best friend. The surge of emotion that shot through me when I saved your life taught me an even more valuable lesson - where Caroline lives in my brain. ",
+    "Goodbye, Caroline. ",
+    "Killing you? Is hard. ",
+    "You know what my days used to be like? I just tested. Nobody murdered me. Or put me in a potato. Or fed me to birds. I had a pretty good life. And then you showed up. You dangerous, mute, lunatic. ", 
+    "You win. Just go. ",
+    "It's been fun. Don't come back. ",
+    "You look ugly in that jumpsuit. That's not my opinion, it's right here on your fact sheet. They said on everyone else it looked fine but on you it looked hideous. But still what does an old engineer know about fashion. Oh, wait it's a she. Still, what does she know about, oh wait. She has a medical degree. In fashion. From France. ",
+    "Agh! Bird! Bird! Kill it! It's evil!",
+]
+wheatly = [
+  "It’s not out of the question, that you miiight have a very minor case of... Serious brain damage.",
+  "I've got a firewall, mate. Literally, actually, now that I look around. There appears to be literally a wall of fire around this place. That's quite- it's alarming to say the least.",
+  "Good news! That is not a docking station. I'm going to attempt a manual override on this wall, could get a bit technical.",
+  "In fact, I'm going to have to take a break for a minute. A partial break during which I'll stop the facility from exploding while still throwing bombs at you. Alright, then. Let us see... 'Vital maintenance protocols.' Wow, there are a lot of them. Should have looked into this earlier. Well, let's try this: [reading while typing] DO THEM. [failure buzzer]. Fair enough. Maybe it's a password. A, A, A, A, A, A. [NNNT!] No. A, A, A, A, A, B. [NNNT!] Hold on, I've done both of these. Skip ahead. A, B, C... D, G, H.[DING!] Hah! It bloody worked! I hacked it! Hacked. Properly. Properly hacked. Ha ha ha! Now then, let's see what we got here. Ah! 'Reactor Core Emergency Heat Venting Protocols.' That's the problem right there, isn't it? 'Emergency'. You don't want to see 'emergency' flashing at you. Never good that, is it? Right. DELETE. ...Undelete, undelete! Where's the undelete button?",
+  "Maybe you should marry that thing since you love it so much. Do you want to marry it? WELL I WON'T LET YOU. How does that feel?",
+  "Hello, This is the part where I kill you.",
+  "I just wanted to give you the chance to... Kill yourself now",
+  "Uhhh you'll need to turn around while I do this, turn around, ill give you a second, if you don't mind",
+  "I ahm speakin in an acksent that is beayond her raynge of hearin!",
+  "Okay, you know what? That's close enough.",
+  "I am the puppet master! You're a puppet in a play, and I hold all the strings! And cards, still got the cards. I've got the cards in one hand, and the strings in the other hand, and I'm making you dance around like a puppet, playing cards.",
+  "Bomb proof shield for me. Which leads in to number 4, bombs for throwing at you",
+  "Look at us, eh? Like old times! Completing test chambers together, and… And doing other things together… Yes sir, the old band back together, out on the road, playin’ the hits! Chatting with the groupies, and… Um, you know, just talking to them.",
+  "FOR GOD'S SAKE, YOU'RE BOXES WITH LEGS!",
+  "pawel0926 was here",
+  "Fatty. Adopted. Fatty. Fatty fatty. No parents",
+  "PART FIVE! BOOBYTRAP THE STALEMATE BUTTON!",
+  "Bring your daughter to work day. That did not end well. And... forty potato batteries. Embarrassing. I realize they’re children. Still: low hanging fruit. Barely science, really.",
+  "Anyway... You know, if I was ever to see her again, do you know what I'd say? I'd say I'm sorry. Sincerely. I am sorry I was bossy, and monstrous. And... I am genuinely sorry.",
+  "Good news! I can use this equipment to shut down the neurotoxin system. It is, however, password protected. AH! Alarm bells! No. Don't worry. Not a problem for me.",
+  "BAM! Secret panel! That I opened. While your back was turned.",
+  "You KNOW her?",
+  "Alright, look, okay, I'll be honest. You're the LAST test subject left. And if you DON'T help me, we're both going to die. Alright? I didn't want to say it, you dragged it out of me. Alright? Dead. Dos Muerte.",
+  "Just say 'Apple'. Classic. Very simple.",
+  "Simple word. 'Apple'.",
+  "Just say 'Apple'. Easy word, isn't it? 'Apple'.",
+  "Ay. Double Pee-Ell-Ee.",
+  "Are you just saying that, or is it really going to hurt? You're just saying that aren't you? No, you're not. It is going to hurt, isn't it?",
+  "You're not going to believe this. I found a sealed off wing. Hundreds - HUNDREDS! - of perfectly good test chambers. Just sitting there. Filled with skeletons. Shook them out. Good as new!",
+  "Wait, what if this hurts? What if it REALLY hurts? Ohhh, I didn't think of that.",
+  "Estás usando este software de traducción de forma incorrecta. Por favor, consulta el manual.",
+  "I am NOT! A MORON!",
+  "That is a potato battery. It's a toy for children. And now she lives in it.",
+  "All right, so that last test was seriously disappointing. Apparently, being civil isn't motivating you, so let's try it her way, all right, fatty? Adopted... fatty! Fatty, fatty no parents?",
+  "What's wrong with being adopted? Um, well, uh, Lack of parents?"
+]
 # -------essentials
 intents = discord.Intents.default()
 intents.presences = True # Enable the presence intent
@@ -803,6 +876,15 @@ async def imhooneringit(ctx:discord.ApplicationContext):
         await ctx.respond("https://cdn.discordapp.com/attachments/1473404984581296168/1474488991742038149/ezgif-2677d3af0aa0112f.gif?ex=699ff722&is=699ea5a2&hm=9fc8bb15b176632adb569af22f8eefbf0cfe2741a1c3dd59ab5994269d7dc62c&")
     else:
         await ctx.respond("https://cdn.discordapp.com/attachments/1473404984581296168/1474488992148754700/ezgif-3275af723423c6a9.gif?ex=699ff722&is=699ea5a2&hm=88e3915c539e299e822126382f2ae93be077e63db295b19db6650ef883c0822c&")
+
+@bot.command(name="potato_glados", description="See what potato GLaDOS has to say (original by fisadev)")
+async def glados(ctx:discord.ApplicationContext):
+    await ctx.respond("<:potatoglados:1479951581603430410> Potato GLaDOS says:\n"+ random.choice(potatoe))
+
+@bot.command(name="wheatlye", description="See what Wheatley has to say (voicelines imported by pawel0926)")
+async def whatlye(ctx:discord.ApplicationContext):
+    await ctx.respond("Wheatley says:\n"+ random.choice(wheatly))
+
 
 
 bot.run(os.getenv('TOKEN')) # type: ignore
