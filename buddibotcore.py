@@ -23,6 +23,7 @@ import ffmpeg
 import pyautogui
 import keyboard
 import webbrowser
+import ctypes
 
 # ---- variables cause its annoying to have them clutter my shyt ----
 hytale = "https://cdn.discordapp.com/attachments/1461513081459970236/1461762256168550648/image.png?ex=696bbbb0&is=696a6a30&hm=fbb800c1305463a1d18cc85e353cf1eac3e1ce1c3e84dd4b492b16a5c6b7b1fe&"
@@ -101,6 +102,53 @@ restartin = [
     "This better be worth it, buddy!",
     "YOU COULD NOT COMPREHEND THE TRUE NATURE OF /admin resetto'S ATTACK!\n-1hp"
 ]
+
+subjects = [
+    'fat!',
+    'ugly!',
+    'stupid!',
+    'shiny!',
+    'stinky!',
+    'homeless!',
+    'Yo Mama!',
+]
+
+buildup = [
+
+    'crossed the street,',
+    'ate food,',
+    'played Wii Fit,',
+    'microwaved a burger at her job,',
+    'went to work,',
+    'deposited money at the atm,',
+    'caught the Bay Harbor Butcher',
+    'needed some cash,',
+    'played fortnite,',
+    'played umg but more,',
+    'played subway surfers,',
+    'played Forsaken,',
+    'fed ducks,',
+    'looked in the mirror,',
+    'died,',
+
+]
+
+punchline = [
+
+    'she frickin died!',
+    'she made an onion cry!',
+    'she needs cheatcodes to play Wii Fit!',
+    'she played subway surfers!',
+    'she killed herself!',
+    'she played on Xbox Live!',
+    '',
+    'she exploded!',
+    'she donated to Jerma985!',
+    'she got the job at Freddy Fazbears Pizza!',
+    'she killbinded!',
+    'the mirror shattered!',
+]
+
 # -------essentials
 intents = discord.Intents.default()
 intents.presences = True # Enable the presence intent
@@ -463,6 +511,22 @@ async def get_music(ctx):
 @bot.command(description="Say hi to Buddie-bot")
 async def hello(ctx):
   await ctx.respond(f"Hello, {ctx.author}! <:bluecap_cool:1461469457661694045>")
+
+@bot.slash_command(name="yomama", description="Bot will say a random Yo Mama joke!")
+async def hello(ctx: discord.ApplicationContext):
+    joke = f'Yo mama so {random.choice(subjects)} When she {random.choice(buildup)} {random.choice(punchline)}'
+    await ctx.respond(joke)
+
+@bot.slash_command(name="send", description="Generate a windows error message onto my pc!")
+@discord.option("message", description="What the error message is")
+async def hello(ctx: discord.ApplicationContext, message: str):
+    check = len(message)
+
+    if check >= 964:
+        await ctx.respond("too many characters for discord")
+    else:   
+        await ctx.respond(f"{ctx.author} has sent an error message titled {message}")
+        ctypes.windll.user32.MessageBoxW(0, message, f'{ctx.author} said:', 16) 
 
 @bot.command(name="whatareyoudoing", description="Ask the bot what he's doing")
 async def wyd(ctx: discord.ApplicationContext):
