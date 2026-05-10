@@ -99,7 +99,8 @@ restartin = [
     "https://cdn.discordapp.com/attachments/1471252400999239895/1471253871698645186/roblock_hard.mov?ex=6990e671&is=698f94f1&hm=6ebbe6d2549fcb6e449dfec46f53ffa923528a460444bfbb1c70d26b41efbd53&",
     "Ah, shit! Here we go again.",
     "This better be worth it, buddy!",
-    "YOU COULD NOT COMPREHEND THE TRUE NATURE OF /admin resetto'S ATTACK!\n-1hp"
+    "YOU COULD NOT COMPREHEND THE TRUE NATURE OF /admin resetto'S ATTACK!\n-1hp",
+    "I HATE ALL OF YOU"
 ]
 
 subjects = [
@@ -585,21 +586,11 @@ async def get_music(ctx):
 async def hello(ctx):
   await ctx.respond(f"Hello, {ctx.author}! <:bluecap_cool:1461469457661694045>")
 
+# Signed By D-Dunce-Duncer Most Commonly Known AS Camk / Cake / Really Smart Intellectuialee
 @bot.slash_command(name="yomama", description="Bot will say a random Yo Mama joke!")
 async def hello(ctx: discord.ApplicationContext):
     joke = f'Yo mama so {random.choice(subjects)} When she {random.choice(buildup)} {random.choice(punchline)}'
     await ctx.respond(joke)
-
-@bot.slash_command(name="send", description="Generate a windows error message onto my pc!")
-@discord.option("message", description="What the error message is")
-async def hello(ctx: discord.ApplicationContext, message: str):
-    check = len(message)
-
-    if check >= 964:
-        await ctx.respond("too many characters for discord")
-    else:   
-        await ctx.respond(f"{ctx.author} has sent an error message titled {message}")
-        ctypes.windll.user32.MessageBoxW(0, message, f'{ctx.author} said:', 16) 
 
 @bot.command(name="whatareyoudoing", description="Ask the bot what he's doing")
 async def wyd(ctx: discord.ApplicationContext):
@@ -857,7 +848,46 @@ async def webbingsyte(ctx:discord.ApplicationContext, site: str):
     webbrowser.open(site)  # Source - https://stackoverflow.com/a/4302041
     await ctx.respond("done")
 
-# ok no more admino comands
+# THIS IS WHERE ME. ME ME ME. CAKE. CODE
+@bot.slash_command(name="ping", description="Ping somebody of your choice with Buddie Bot!")
+@discord.option("user", description="The person you are trying to annoy")
+async def hello(ctx: discord.ApplicationContext, user: discord.Member):
+    await ctx.respond("Father its me micheal. I did it.", ephemeral=True)
+    for i in range(random.randint(4,10)):
+        chn = ctx.channel
+        mes = [f'<@{user.id}>', f'<@{user.id}> <@{user.id}>', 'WAKE UP', 'GET INN', f'<@{user.id}> WAKE UP BITCH', f'<@{user.id}> GET IN']
+        await chn.send(random.choice(mes))
+
+@bot.slash_command(name="send", description="Generate a windows error message onto Buddie's pc!")
+@discord.option("message", description="What the error message says")
+async def hello(ctx: discord.ApplicationContext, message: str):
+    check = len(message)
+    if check >= 964:
+        await ctx.respond("too many characters for discord")
+    else:   
+        await ctx.respond(f"{ctx.author} has sent an error message titled {message}")
+        ctypes.windll.user32.MessageBoxW(0, message, f'{ctx.author} said:', 16) 
+
+@bot.slash_command(name="mouse", description="Rapidly move Buddie's mouse cursor and click!")
+@commands.cooldown(1, 10, commands.BucketType.user) 
+@discord.option("amount", description="Amount of times to move my mouse cursor! Can be between 1 and 10")
+@discord.option("speed", description="How long it takes for mouse to reach position! Can be between 0.1 and 1")
+async def hello(ctx: discord.ApplicationContext, amount: int, speed: float):
+    if amount > 10 or amount < 1:
+        await ctx.respond("Sorry! You can only move the mouse cursor between 1 to 10 times Fuck.", ephemeral=True)
+        return
+    elif speed > 1 or speed < 0.1:
+        await ctx.respond("Sorry! You can only set the speed to be between 0.1 and 1 Fuck.", ephemeral=True)
+        return
+    await ctx.respond(f"Successfully moved Buddie's mouse cursor {amount} times.")
+    for i in range(amount):
+        rand1 = random.randint(0, 1920)
+        rand2 = random.randint(0, 1080)
+        pyautogui.moveTo(rand1, rand2, duration=speed)
+        await asyncio.sleep(speed - 1)
+        pyautogui.click()
+
+# ok no more admino comands / cake commands
 @bot.command(name="github_info", description="Link to the Github page for this bot")
 async def leenk(ctx:discord.ApplicationContext):
     await ctx.respond("[Here!](https://github.com/gamer123566/buddie-bot)")
